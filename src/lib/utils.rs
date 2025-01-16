@@ -13,12 +13,23 @@ use std::{
 
 use super::models::{Album, Track};
 
+// Function to sanitize filenames by replacing invalid characters
+fn sanitize_filename(filename: &str) -> String {
+    filename.replace(|c: char| {
+        c == '<' || c == '>' || c == ':' || c == '"' || c == '/' ||
+        c == '\\' || c == '|' || c == '?' || c == '*'
+    }, "_")
+}
+
 pub fn prepare_directory(path: Option<&PathBuf>, album: &Album) -> Result<PathBuf> {
+    let artist = sanitize_filename(&album.artist);
+    let album_name = sanitize_filename(&album.album);
+
     let path = match path {
-        Some(path) => Path::new(path).join(&album.artist),
-        None => PathBuf::from(&album.artist),
+        Some(path) => Path::new(path).join(artist),
+        None => PathBuf::from(artist),
     }
-    .join(&album.album);
+    .join(album_name);
 
     if !path.exists() {
         fs::create_dir_all(&path)?;
@@ -35,7 +46,8 @@ pub fn make_path(track: &Track, root: &Path, track_format: &String) -> PathBuf {
         parse_track_template(track_format, track)
     };
 
-    root.join(file_name).with_extension("mp3")
+    let sanitized_file_name = sanitize_filename(&file_name);
+    root.join(sanitized_file_name).with_extension("mp3")
 }
 
 pub fn track_path(track: &Track, root: &Path, track_format: &String) -> Result<PathBuf> {
@@ -45,7 +57,8 @@ pub fn track_path(track: &Track, root: &Path, track_format: &String) -> Result<P
         parse_track_template(track_format, track)
     };
 
-    let file = root.join(file_name).with_extension("mp3");
+    let sanitized_file_name = sanitize_filename(&file_name);
+    let file = root.join(sanitized_file_name).with_extension("mp3");
 
     if file.exists() {
         bail!("{} already exists", file.display())
