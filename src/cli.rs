@@ -95,7 +95,9 @@ impl Default for Config {
 fn validate_format(f: &str) -> Result<String, String> {
     let vars = format_container("", "", "", "");
 
-    strfmt(f, &vars).map_err(|err| err.to_string())
+    strfmt(f, &vars).map_err(|err| err.to_string())?;
+
+    Ok(f.to_string())
 }
 
 pub fn expand_tilde(p: &str) -> PathBuf {
