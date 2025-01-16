@@ -94,7 +94,7 @@ Options:
           By default files are saved in the current directory.
 
   -S, --skip-albums <ALBUMS>
-          Skip downloading these albums, note that albums need to be delimited by ',' eg: -s 'one,two' or --skip-albums=one,two
+          Skip downloading these albums, note that albums need to be delimited by ',' eg: -S 'one,two' or --skip-albums=one,two
 
   -l, --list-available
           List albums/tracks available for download

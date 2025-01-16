@@ -44,7 +44,7 @@ note that `.mp3` is appended automatically.")]
     pub(crate) track_format: Option<String>,
 
     /// Skip downloading these albums, note that albums need to be delimited by ','
-    /// eg: -s 'one,two' or --skip-albums=one,two
+    /// eg: -S 'one,two' or --skip-albums=one,two
     #[clap(short = 'S', long, value_name = "ALBUMS", value_delimiter = ',')]
     pub(crate) skip_albums: Option<Vec<String>>,
 
